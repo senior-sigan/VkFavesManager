@@ -18,11 +18,14 @@
 
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
+    <script type="text/javascript" src="bower_components/lodash/lodash.min.js"></script>
+    <script type="text/javascript" src="bower_components/pouchdb/dist/pouchdb.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js scripts/index.js -->
-    <script src="scripts/index.js"></script>
+    <script type="text/javascript" src="scripts/core/vkApi.js"></script>
+    <script type="text/javascript" src="scripts/index.js"></script>
     <!-- endbuild -->
   </body>
 </html>

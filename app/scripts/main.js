@@ -1,5 +1,8 @@
 'use strict';
 
+// modules container
+window.app = window.app || {};
+
 // Listens for the app launching then creates the window
 chrome.app.runtime.onLaunched.addListener(function() {
   var width = 500;

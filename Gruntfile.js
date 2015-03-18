@@ -173,7 +173,7 @@ module.exports = function (grunt) {
     htmlmin: {
       dist: {
         options: {
-          customAttrAssign: [/\?=/],
+          customAttrAssign: '[/\?=/]',
           collapseBooleanAttributes: true,
           collapseWhitespace: true,
           removeAttributeQuotes: true,
@@ -298,13 +298,13 @@ module.exports = function (grunt) {
   grunt.registerTask('debug', function (platform) {
     var watch = grunt.config('watch');
     platform = platform || 'chrome';
-    
+
 
     // Configure style task for debug:server task
     if (platform === 'server') {
       watch.styles.tasks = ['newer:copy:styles'];
       watch.styles.options.livereload = false;
-      
+
     }
 
     // Configure updated watch task
