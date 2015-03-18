@@ -1,6 +1,16 @@
 {
   "name": "vk-faves-manager",
   "version": "0.0.0",
+  "author": "Ilya Siganov <ilya.blan4@gmail.com> (https://github.com/blan4)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blan4/VkFavesManager"
+  },
+  "bugs": {
+    "url": "https://github.com/blan4/VkFavesManager/issues",
+    "email": "ilya.blan4@gmail.com"
+  },
+  "license": "GPL-2.0",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.5",
@@ -14,8 +24,8 @@
     "grunt-contrib-htmlmin": "~0.4.0",
     "grunt-bower-install": "~1.0.0",
     "grunt-contrib-imagemin": "~0.9.3",
-    "grunt-contrib-watch": "~0.6.1", 
-    "grunt-usemin": "~3.0.0", 
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-usemin": "~3.0.0",
     "grunt-newer": "~1.1.0",
     "grunt-svgmin": "~2.0.1",
     "grunt-concurrent": "~0.5.0",
