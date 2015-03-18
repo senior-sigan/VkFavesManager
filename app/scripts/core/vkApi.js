@@ -1,6 +1,7 @@
-(function(window) {
+window.app = window.app || {};
+
+(function(module) {
   'use strict';
-  window.app = window.app || {};
 
   var asUrlQuery = function(params) {
     var query = [];
@@ -25,12 +26,19 @@
 
     return 'https://oauth.vk.com/authorize?' + query;};
 
-  VkApi.prototype.faveGetPosts = function(options) {
+  VkApi.prototype.faveGetPosts = function(successCallback, errorCallback, options = {}) {
     options['access_token'] = this.token;
     var query = asUrlQuery(options);
     var url = 'https://api.vk.com/method/fave.getPosts?' + query;
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+      successCallback(JSON.parse(xhr.responseText), xhr);
+    };
+    xhr.onerror = function() {
+      errorCallback(xhr.status, xhr.statusText, JSON.parse(xhr.responseText), xhr);
+    };
+    xhr.open('GET', url, true);
+    xhr.send(null);};
 
-    return url;};
-
-  window.app.VkApi = VkApi;
-})(window);
+  module.VkApi = VkApi;
+})(window.app);
