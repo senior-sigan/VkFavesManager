@@ -1,339 +1,392 @@
-// Generated on 2015-03-18 using generator-chromeapp 0.2.15
-'use strict';
+/*jshint camelcase: false*/
 
 module.exports = function (grunt) {
+  'use strict';
 
-  // Load grunt tasks automatically
+  // load all grunt tasks
+  require('time-grunt')(grunt);
   require('load-grunt-tasks')(grunt);
 
-  // Time how long tasks take. Can help when optimizing build times
-  require('time-grunt')(grunt);
-
-  // Configurable paths
+  // configurable paths
   var config = {
     app: 'app',
     dist: 'dist',
-    tasks: grunt.cli.tasks
+    distMac32: 'dist/MacOS32',
+    distMac64: 'dist/MacOS64',
+    distLinux32: 'dist/Linux32',
+    distLinux64: 'dist/Linux64',
+    distWin: 'dist/Win',
+    tmp: 'buildTmp',
+    resources: 'resources'
   };
 
-  // Define the configuration for all the tasks
   grunt.initConfig({
-
-    // Project settings
     config: config,
-
-    // Watches files for changes and runs tasks based on the changed files
-    watch: {
-      bower: {
-        files: ['bower.json'],
-        tasks: ['bowerInstall']
-      },
-      js: {
-        files: ['<%= config.app %>/scripts/{,*/}*.js'],
-        tasks: ['jshint'],
-        options: {
-          livereload: true
-        }
-      },
-      gruntfile: {
-        files: ['Gruntfile.js']
-      },
-      styles: {
-        files: ['<%= config.app %>/styles/{,*/}*.css'],
-        tasks: [],
-        options: {
-          livereload: true
-        }
-      },
-      livereload: {
-        options: {
-          livereload: '<%= connect.options.livereload %>'
-        },
-        files: [
-          '.tmp/styles/{,*/}*.css',
-          '<%= config.app %>/*.html',
-          '<%= config.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-          '<%= config.app %>/manifest.json',
-          '<%= config.app %>/_locales/{,*/}*.json'
-        ]
-      }
-    },
-
-    // Grunt server and debug server settings
-    connect: {
-      options: {
-        port: 9000,
-        livereload: 35729,
-        // change this to '0.0.0.0' to access the server from outside
-        hostname: 'localhost',
-        open: true,
-      },
-      server: {
-        options: {
-          middleware: function(connect) {
-            return [
-              connect.static('.tmp'),
-              connect().use('/bower_components', connect.static('./bower_components')),
-              connect.static(config.app)
-            ];
-          }
-        }
-      },
-      chrome: {
-        options: {
-          open: false,
-          base: [
-            '<%= config.app %>'
-          ]
-        }
-      }
-    },
-
-    // Empties folders to start fresh
     clean: {
-      server: '.tmp',
-      chrome: '.tmp',
       dist: {
         files: [{
           dot: true,
           src: [
-            '.tmp',
             '<%= config.dist %>/*',
-            '!<%= config.dist %>/.git*'
+            '<%= config.tmp %>/*'
+          ]
+        }]
+      },
+      distMac32: {
+        files: [{
+          dot: true,
+          src: [
+            '<%= config.distMac32 %>/*',
+            '<%= config.tmp %>/*'
+          ]
+        }]
+      },
+      distMac64: {
+        files: [{
+          dot: true,
+          src: [
+            '<%= config.distMac64 %>/*',
+            '<%= config.tmp %>/*'
+          ]
+        }]
+      },
+      distLinux64: {
+        files: [{
+          dot: true,
+          src: [
+            '<%= config.distLinux64 %>/*',
+            '<%= config.tmp %>/*'
+          ]
+        }]
+      },
+      distLinux32: {
+        files: [{
+          dot: true,
+          src: [
+            '<%= config.distLinux32 %>/*',
+            '<%= config.tmp %>/*'
+          ]
+        }]
+      },
+      distWin: {
+        files: [{
+          dot: true,
+          src: [
+            '<%= config.distWin %>/*',
+            '<%= config.tmp %>/*'
           ]
         }]
       }
     },
-
-    // Make sure code styles are up to par and there are no obvious mistakes
     jshint: {
       options: {
-        jshintrc: '.jshintrc',
-        reporter: require('jshint-stylish')
+        jshintrc: '.jshintrc'
       },
-      all: [
-        'Gruntfile.js',
-        '<%= config.app %>/scripts/{,*/}*.js',
-        '!<%= config.app %>/scripts/vendor/*'
-      ]
+      files: '<%= config.app %>/js/*.js'
     },
-
-    // Automatically inject Bower components into the HTML file
-    bowerInstall: {
-      app: {
-        src: ['<%= config.app %>/index.html'],
-        ignorePath: '<%= config.app %>/'
-      }
-    },
-
-    // Reads HTML for usemin blocks to enable smart builds that automatically
-    // concat, minify and revision files. Creates configurations in memory so
-    // additional tasks can operate on them
-    useminPrepare: {
-      options: {
-        dest: '<%= config.dist %>'
-      },
-      html: [
-        '<%= config.app %>/index.html'
-      ]
-    },
-
-    // Performs rewrites based on rev and the useminPrepare configuration
-    usemin: {
-      options: {
-        assetsDirs: ['<%= config.dist %>', '<%= config.dist %>/images']
-      },
-      html: ['<%= config.dist %>/{,*/}*.html'],
-      css: ['<%= config.dist %>/styles/{,*/}*.css']
-    },
-
-    // The following *-min tasks produce minified files in the dist folder
-    imagemin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= config.app %>/images',
-          src: '{,*/}*.{gif,jpeg,jpg,png}',
-          dest: '<%= config.dist %>/images'
-        }]
-      }
-    },
-
-    svgmin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: '<%= config.app %>/images',
-          src: '{,*/}*.svg',
-          dest: '<%= config.dist %>/images'
-        }]
-      }
-    },
-
-    htmlmin: {
-      dist: {
-        options: {
-          customAttrAssign: '[/\?=/]',
-          collapseBooleanAttributes: true,
-          collapseWhitespace: true,
-          removeAttributeQuotes: true,
-          removeCommentsFromCDATA: true,
-          removeEmptyAttributes: true,
-          removeOptionalTags: true,
-          removeRedundantAttributes: true,
-          useShortDoctype: true
-        },
-        files: [{
-          expand: true,
-          cwd: '<%= config.dist %>',
-          src: '{,*/}*.html',
-          dest: '<%= config.dist %>'
-        }]
-      }
-    },
-
-    // By default, your `index.html`'s <!-- Usemin block --> will take care of
-    // minification. These next options are pre-configured if you do not wish
-    // to use the Usemin blocks.
-    // cssmin: {
-    //   dist: {
-    //     files: {
-    //       '<%= config.dist %>/styles/main.css': [
-    //         '.tmp/styles/{,*/}*.css',
-    //         '<%= config.app %>/styles/{,*/}*.css'
-    //       ]
-    //     }
-    //   }
-    // },
-    // uglify: {
-    //   dist: {
-    //     files: {
-    //       '<%= config.dist %>/scripts/scripts.js': [
-    //         '<%= config.dist %>/scripts/scripts.js'
-    //       ]
-    //     }
-    //   }
-    // },
-    // concat: {
-    //   dist: {}
-    // },
-
-    // Copies remaining files to places other tasks can use
     copy: {
-      dist: {
+      appLinux: {
         files: [{
           expand: true,
-          dot: true,
           cwd: '<%= config.app %>',
-          dest: '<%= config.dist %>',
-          src: [
-            '*.{ico,png,txt}',
-            'images/{,*/}*.{webp,gif}',
-            '{,*/}*.html',
-            'styles/fonts/{,*/}*.*',
-            '_locales/{,*/}*.json',
-          ]
+          dest: '<%= config.distLinux64 %>/app.nw',
+          src: '**'
         }]
       },
-      styles: {
-        expand: true,
-        dot: true,
-        cwd: '<%= config.app %>/styles',
-        dest: '.tmp/styles/',
-        src: '{,*/}*.css'
+      appLinux32: {
+        files: [{
+          expand: true,
+          cwd: '<%= config.app %>',
+          dest: '<%= config.distLinux32 %>/app.nw',
+          src: '**'
+        }]
+      },
+      appMacos32: {
+        files: [{
+          expand: true,
+          cwd: '<%= config.app %>',
+          dest: '<%= config.distMac32 %>/node-webkit.app/Contents/Resources/app.nw',
+          src: '**'
+        }, {
+          expand: true,
+          cwd: '<%= config.resources %>/mac/',
+          dest: '<%= config.distMac32 %>/node-webkit.app/Contents/',
+          filter: 'isFile',
+          src: '*.plist'
+        }, {
+          expand: true,
+          cwd: '<%= config.resources %>/mac/',
+          dest: '<%= config.distMac32 %>/node-webkit.app/Contents/Resources/',
+          filter: 'isFile',
+          src: '*.icns'
+        }, {
+          expand: true,
+          cwd: '<%= config.app %>/../node_modules/',
+          dest: '<%= config.distMac32 %>/node-webkit.app/Contents/Resources/app.nw/node_modules/',
+          src: '**'
+        }]
+      },
+      appMacos64: {
+        files: [{
+          expand: true,
+          cwd: '<%= config.app %>',
+          dest: '<%= config.distMac64 %>/node-webkit.app/Contents/Resources/app.nw',
+          src: '**'
+        }, {
+          expand: true,
+          cwd: '<%= config.resources %>/mac/',
+          dest: '<%= config.distMac64 %>/node-webkit.app/Contents/',
+          filter: 'isFile',
+          src: '*.plist'
+        }, {
+          expand: true,
+          cwd: '<%= config.resources %>/mac/',
+          dest: '<%= config.distMac64 %>/node-webkit.app/Contents/Resources/',
+          filter: 'isFile',
+          src: '*.icns'
+        }, {
+          expand: true,
+          cwd: '<%= config.app %>/../node_modules/',
+          dest: '<%= config.distMac64 %>/node-webkit.app/Contents/Resources/app.nw/node_modules/',
+          src: '**'
+        }]
+      },
+      webkit32: {
+        files: [{
+          expand: true,
+          cwd: '<%=config.resources %>/node-webkit/MacOS32',
+          dest: '<%= config.distMac32 %>/',
+          src: '**'
+        }]
+      },
+      webkit64: {
+        files: [{
+          expand: true,
+          cwd: '<%=config.resources %>/node-webkit/MacOS64',
+          dest: '<%= config.distMac64 %>/',
+          src: '**'
+        }]
+      },
+      copyWinToTmp: {
+        files: [{
+          expand: true,
+          cwd: '<%= config.resources %>/node-webkit/Windows/',
+          dest: '<%= config.tmp %>/',
+          src: '**'
+        }]
       }
     },
-
-    // Run some tasks in parallel to speed up build process
-    concurrent: {
-      server: [
-        'copy:styles'
-      ],
-      chrome: [
-        'copy:styles'
-      ],
-      dist: [
-        'copy:styles',
-        'imagemin',
-        'svgmin'
-      ]
-    },
-
-    // Merge event page, update build number, exclude the debug script
-    chromeManifest: {
-      dist: {
-        options: {
-          buildnumber: true,
-          background: {
-            target: 'scripts/background.js',
-            exclude: [
-              'scripts/chromereload.js'
-            ]
-          }
-        },
-        src: '<%= config.app %>',
-        dest: '<%= config.dist %>'
-      }
-    },
-
-    // Compress files in dist to make Chromea Apps package
     compress: {
-      dist: {
+      appToTmp: {
         options: {
-          archive: function() {
-            var manifest = grunt.file.readJSON('app/manifest.json');
-            return 'package/vk faves manager-' + manifest.version + '.zip';
-          }
+          archive: '<%= config.tmp %>/app.zip'
         },
         files: [{
           expand: true,
-          cwd: 'dist/',
-          src: ['**'],
-          dest: ''
+          cwd: '<%= config.app %>',
+          src: ['**']
+        }]
+      },
+      finalWindowsApp: {
+        options: {
+          archive: '<%= config.distWin %>/VkFavesManager.zip'
+        },
+        files: [{
+          expand: true,
+          cwd: '<%= config.tmp %>',
+          src: ['**']
+        }]
+      }
+    },
+    rename: {
+      macApp32: {
+        files: [{
+          src: '<%= config.distMac32 %>/node-webkit.app',
+          dest: '<%= config.distMac32 %>/VkFavesManager.app'
+        }]
+      },
+      macApp64: {
+        files: [{
+          src: '<%= config.distMac64 %>/node-webkit.app',
+          dest: '<%= config.distMac64 %>/VkFavesManager.app'
+        }]
+      },
+      zipToApp: {
+        files: [{
+          src: '<%= config.tmp %>/app.zip',
+          dest: '<%= config.tmp %>/app.nw'
         }]
       }
     }
   });
 
-  grunt.registerTask('debug', function (platform) {
-    var watch = grunt.config('watch');
-    platform = platform || 'chrome';
-
-
-    // Configure style task for debug:server task
-    if (platform === 'server') {
-      watch.styles.tasks = ['newer:copy:styles'];
-      watch.styles.options.livereload = false;
-
-    }
-
-    // Configure updated watch task
-    grunt.config('watch', watch);
-
-    grunt.task.run([
-      'clean:' + platform,
-      'concurrent:' + platform,
-      'connect:' + platform,
-      'watch'
-    ]);
+  grunt.registerTask('chmod32', 'Add lost Permissions.', function () {
+    var fs = require('fs'),
+      path = config.distMac32 + '/VkFavesManager.app/Contents/';
+    fs.chmodSync(path + 'Frameworks/node-webkit Helper EH.app/Contents/MacOS/node-webkit Helper EH', '555');
+    fs.chmodSync(path + 'Frameworks/node-webkit Helper NP.app/Contents/MacOS/node-webkit Helper NP', '555');
+    fs.chmodSync(path + 'Frameworks/node-webkit Helper.app/Contents/MacOS/node-webkit Helper', '555');
+    fs.chmodSync(path + 'MacOS/node-webkit', '555');
   });
 
-  grunt.registerTask('build', [
-    'clean:dist',
-    'chromeManifest:dist',
-    'useminPrepare',
-    'concurrent:dist',
-    'concat',
-    'cssmin',
-    'uglify',
-    'copy',
-    'usemin',
-    'htmlmin',
-    'compress'
+  grunt.registerTask('chmod64', 'Add lost Permissions.', function () {
+    var fs = require('fs'),
+      path = config.distMac64 + '/VkFavesManager.app/Contents/';
+    fs.chmodSync(path + 'Frameworks/node-webkit Helper EH.app/Contents/MacOS/node-webkit Helper EH', '555');
+    fs.chmodSync(path + 'Frameworks/node-webkit Helper NP.app/Contents/MacOS/node-webkit Helper NP', '555');
+    fs.chmodSync(path + 'Frameworks/node-webkit Helper.app/Contents/MacOS/node-webkit Helper', '555');
+    fs.chmodSync(path + 'MacOS/node-webkit', '555');
+  });
+
+  grunt.registerTask('createLinuxApp', 'Create linux distribution.', function (version) {
+    var done = this.async();
+    var childProcess = require('child_process');
+    var exec = childProcess.exec;
+    var path = './' + (version === 'Linux64' ? config.distLinux64 : config.distLinux32);
+    exec('mkdir -p ' + path + '; cp resources/node-webkit/' + version + '/nw.pak ' + path + ' && cp resources/node-webkit/' + version + '/nw ' + path + '/node-webkit && cp resources/node-webkit/' + version + '/icudtl.dat ' + path + '/icudtl.dat', function (error, stdout, stderr) {
+      var result = true;
+      if (stdout) {
+        grunt.log.write(stdout);
+      }
+      if (stderr) {
+        grunt.log.write(stderr);
+      }
+      if (error !== null) {
+        grunt.log.error(error);
+        result = false;
+      }
+      done(result);
+    });
+  });
+
+  grunt.registerTask('createWindowsApp', 'Create windows distribution.', function () {
+    var done = this.async();
+    var concat = require('concat-files');
+    concat([
+      'buildTmp/nw.exe',
+      'buildTmp/app.nw'
+    ], 'buildTmp/VkFavesManager.exe', function () {
+      var fs = require('fs');
+      fs.unlink('buildTmp/app.nw', function (error, stdout, stderr) {
+        if (stdout) {
+          grunt.log.write(stdout);
+        }
+        if (stderr) {
+          grunt.log.write(stderr);
+        }
+        if (error !== null) {
+          grunt.log.error(error);
+          done(false);
+        } else {
+          fs.unlink('buildTmp/nw.exe', function (error, stdout, stderr) {
+            var result = true;
+            if (stdout) {
+              grunt.log.write(stdout);
+            }
+            if (stderr) {
+              grunt.log.write(stderr);
+            }
+            if (error !== null) {
+              grunt.log.error(error);
+              result = false;
+            }
+            done(result);
+          });
+        }
+      });
+    });
+  });
+
+  grunt.registerTask('setVersion', 'Set version to all needed files', function (version) {
+    var config = grunt.config.get(['config']);
+    var appPath = config.app;
+    var resourcesPath = config.resources;
+    var mainPackageJSON = grunt.file.readJSON('package.json');
+    var appPackageJSON = grunt.file.readJSON(appPath + '/package.json');
+    var infoPlistTmp = grunt.file.read(resourcesPath + '/mac/Info.plist.tmp', {
+      encoding: 'UTF8'
+    });
+    var infoPlist = grunt.template.process(infoPlistTmp, {
+      data: {
+        version: version
+      }
+    });
+    mainPackageJSON.version = version;
+    appPackageJSON.version = version;
+    grunt.file.write('package.json', JSON.stringify(mainPackageJSON, null, 2), {
+      encoding: 'UTF8'
+    });
+    grunt.file.write(appPath + '/package.json', JSON.stringify(appPackageJSON, null, 2), {
+      encoding: 'UTF8'
+    });
+    grunt.file.write(resourcesPath + '/mac/Info.plist', infoPlist, {
+      encoding: 'UTF8'
+    });
+  });
+
+  grunt.registerTask('dist-linux', [
+    'jshint',
+    'clean:distLinux64',
+    'copy:appLinux',
+    'createLinuxApp:Linux64'
   ]);
 
-  grunt.registerTask('default', [
-    'newer:jshint',
-    'build'
+  grunt.registerTask('dist-linux32', [
+    'jshint',
+    'clean:distLinux32',
+    'copy:appLinux32',
+    'createLinuxApp:Linux32'
   ]);
+
+  grunt.registerTask('dist-win', [
+    'jshint',
+    'clean:distWin',
+    'copy:copyWinToTmp',
+    'compress:appToTmp',
+    'rename:zipToApp',
+    'createWindowsApp',
+    'compress:finalWindowsApp'
+  ]);
+
+  grunt.registerTask('dist-mac', [
+    'jshint',
+    'clean:distMac64',
+    'copy:webkit64',
+    'copy:appMacos64',
+    'rename:macApp64',
+    'chmod64'
+  ]);
+
+  grunt.registerTask('dist-mac32', [
+    'jshint',
+    'clean:distMac32',
+    'copy:webkit32',
+    'copy:appMacos32',
+    'rename:macApp32',
+    'chmod32'
+  ]);
+
+  grunt.registerTask('check', [
+    'jshint'
+  ]);
+
+  grunt.registerTask('dmg', 'Create dmg from previously created app folder in dist.', function () {
+    var done = this.async();
+    var createDmgCommand = 'resources/mac/package.sh "VkFavesManager"';
+    require('child_process').exec(createDmgCommand, function (error, stdout, stderr) {
+      var result = true;
+      if (stdout) {
+        grunt.log.write(stdout);
+      }
+      if (stderr) {
+        grunt.log.write(stderr);
+      }
+      if (error !== null) {
+        grunt.log.error(error);
+        result = false;
+      }
+      done(result);
+    });
+  });
+
 };

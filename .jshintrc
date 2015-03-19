@@ -1,13 +1,12 @@
 {
     "node": true,
-    "browser": true,
     "esnext": true,
     "bitwise": true,
     "camelcase": true,
     "curly": true,
     "eqeqeq": true,
     "immed": true,
-    "indent": 2,
+    "indent": 4,
     "latedef": true,
     "newcap": true,
     "noarg": true,
@@ -18,8 +17,5 @@
     "strict": true,
     "trailing": true,
     "smarttabs": true,
-    "globals" : {
-        "chrome": true,
-        "_": true
-    }
+    "white": true
 }

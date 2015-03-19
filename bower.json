@@ -1,9 +1,5 @@
 {
-  "name": "vk-faves-manager",
+  "name": "package",
   "version": "0.0.0",
-  "dependencies": {
-    "pouchdb": "~3.3.1",
-    "lodash": "~3.5.0"
-  },
-  "devDependencies": {}
+  "dependencies": {}
 }
