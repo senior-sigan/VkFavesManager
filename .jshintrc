@@ -19,6 +19,8 @@
   "trailing": true,
   "smarttabs": true,
   "globals" : {
-    "_": true
+    "_": true,
+    "PouchDB": true,
+    "pouchCollate": true
   }
 }

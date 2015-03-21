@@ -3,12 +3,13 @@ window.app = window.app || {};
 (function(module) {
   'use strict';
 
+  var API_VERSION = '5.29';
+
   var asUrlQuery = function(params) {
     var query = [];
     _.forOwn(params, function(value, key) {
-      if (!_.isEmpty(value)) {
+      if (!_.isNull(value) && !_.isUndefined(value) && !_.isEmpty(value.toString())) {
         query.push(key + '=' + value);}});
-
     return query.join('&');};
 
   var VkApi = function(clientId, secret) {
@@ -43,6 +44,7 @@ window.app = window.app || {};
   VkApi.prototype.faveGetPosts = function(successCallback, errorCallback, options) {
     options = options || {};
     options['access_token'] = this.token;
+    options['v'] = API_VERSION;
     var query = asUrlQuery(options);
     var url = 'https://api.vk.com/method/fave.getPosts?' + query;
     var xhr = new XMLHttpRequest();
@@ -52,6 +54,7 @@ window.app = window.app || {};
     xhr.onerror = function() {
       errorCallback(xhr.status, xhr.statusText, JSON.parse(xhr.responseText), xhr);
     };
+    console.log('VkApi: SendRequest: ', url);
     xhr.open('GET', url, true);
     xhr.send(null);};
 
