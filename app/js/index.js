@@ -8,20 +8,30 @@ window.app = window.app || {};
   var scope = ['friends'];
   var url = vk.authUrl(scope);
 
+  var logOut = function() {
+    localStorage.clear();
+    //TODO: clear all cookies
+  };
+
+  var tryGetToken = function(authUrl, callback) {
+    if (localStorage.token) {
+      callback(localStorage.token);}
+    else {
+      startOauth(authUrl, function(token) {
+        localStorage.token = token;
+        callback(token);});}};
+
   var startOauth = function(authUrl, callback) {
     var popup = gui.Window.open(authUrl, {focuse: true});
     popup.on('loaded', function() {
       var url = popup.window.location.href;
-      console.log(url);
       var query = module.parseUriParams(url);
-      console.log(query);
       if (query) {
         var token = query['access_token'];
         if (token) {
-          console.log(token);
           popup.close();
           callback(token);}}});};
 
-  startOauth(url, function(token) {console.log(token);});
+  tryGetToken(url, function(t){console.log(t);});
 
 })(window.app);

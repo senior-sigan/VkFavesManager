@@ -16,6 +16,13 @@ window.app = window.app || {};
     this.clientId = clientId;
     this.secret = secret;};
 
+  /**
+   * Get vk client side oauth url
+   * @see  {@link http://vk.com/dev/auth_mobile} About client-side vk oauth
+   * @see  {@link http://vk.com/dev/permissions} About permissions
+   * @param  {Array[String]} scope Colection of permissions.
+   * @return {[type]}       [description]
+   */
   VkApi.prototype.authUrl = function(scope) {
     var query = asUrlQuery({
       'client_id': this.clientId,
@@ -26,6 +33,13 @@ window.app = window.app || {};
 
     return 'https://oauth.vk.com/authorize?' + query;};
 
+  /**
+   * Get list of faves
+   * @see  {@link http://vk.com/dev/fave.getPosts} fave.getPosts documentation
+   * @param  {function} successCallback Called on success. Return vk response
+   * @param  {function} errorCallback   Called on errors
+   * @param  {Object} options         Hash of api params
+   */
   VkApi.prototype.faveGetPosts = function(successCallback, errorCallback, options) {
     options = options || {};
     options['access_token'] = this.token;
