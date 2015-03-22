@@ -1,7 +1,8 @@
-window.app = window.app || {};
+global.app = global.app || {};
 
 (function(module) {
   'use strict';
+  var _ = require('lodash');
 
   var API_VERSION = '5.29';
 
@@ -9,13 +10,17 @@ window.app = window.app || {};
     var query = [];
     _.forOwn(params, function(value, key) {
       if (!_.isNull(value) && !_.isUndefined(value) && !_.isEmpty(value.toString())) {
-        query.push(key + '=' + value);}});
-    return query.join('&');};
+        query.push(key + '=' + value);
+      }
+    });
+    return query.join('&');
+  };
 
   var VkApi = function(clientId, secret) {
     this.token = null;
     this.clientId = clientId;
-    this.secret = secret;};
+    this.secret = secret;
+  };
 
   /**
    * Get vk client side oauth url
@@ -30,9 +35,11 @@ window.app = window.app || {};
       'scope': scope.join(','),
       'redirect_uri': 'https://oauth.vk.com/blank.html',
       'display': 'page',
-      'response_type': 'token'});
+      'response_type': 'token'
+    });
 
-    return 'https://oauth.vk.com/authorize?' + query;};
+    return 'https://oauth.vk.com/authorize?' + query;
+  };
 
   /**
    * Get list of faves
@@ -47,7 +54,7 @@ window.app = window.app || {};
     options['v'] = API_VERSION;
     var query = asUrlQuery(options);
     var url = 'https://api.vk.com/method/fave.getPosts?' + query;
-    var xhr = new XMLHttpRequest();
+    var xhr = new global.window.XMLHttpRequest();
     xhr.onload = function() {
       successCallback(JSON.parse(xhr.responseText), xhr);
     };
@@ -56,7 +63,8 @@ window.app = window.app || {};
     };
     console.log('VkApi: SendRequest: ', url);
     xhr.open('GET', url, true);
-    xhr.send(null);};
+    xhr.send(null);
+  };
 
   module.VkApi = VkApi;
-})(window.app);
+})(global.app);

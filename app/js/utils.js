@@ -1,7 +1,9 @@
-window.app = window.app || {};
+global.app = global.app || {};
 
-(function(module){
+(function(module) {
   'use strict';
+
+  var _ = require('lodash');
 
   /**
    * Extract fragment from uri. Delimeter is '#'
@@ -17,7 +19,9 @@ window.app = window.app || {};
     _.map(fragment.split('&'), function(pair) {
       var p = pair.split('=');
       params[p[0]] = p[1];
-      return params;});
-    return params;};
+      return params;
+    });
+    return params;
+  };
 
-})(window.app);
+})(global.app);
