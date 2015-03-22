@@ -66,20 +66,44 @@ window.app = window.app || {};
       // Get count of all faves.
       vk.faveGetPosts(
         function(data) {
+          if (data.error) {
+            if (data.error.error_code === 5) {
+              console.log(data);
+              return;
+            }
+            console.log(data.error);
+          }
           var count = data.response.count;
-          console.log('Wkill be loaded: ', count);
+          console.log('Will be loaded: ', count);
           var requestsCount = Math.floor(count / MAX_REQUEST_COUNT);
           _.times(requestsCount, function(i) {
             setTimeout(function() {
               return loadFaves(i * MAX_REQUEST_COUNT);
-            }, 300 * i);});},
+            }, 400 * i);});},
 
         function(status) {
           console.log('ERROR: ', status);},
 
         {count: 1, extended: 0});});};
 
+
+  var getGroups = function() {
+    var map = function(doc, emit) {
+      emit(doc.owner_id, doc);
+    };
+    var reduce = function(keys, values) {
+      return _.map(values, function(el) {
+        return _.pick(el, ['date', 'from_id', 'text', 'attachments']);
+      });
+    };
+    db.query({map: map, reduce: reduce}, {group: true}).then(function(res) {
+      console.log(res);
+    }).catch(function(err){console.log(err);});
+  };
+
   module.loadAllFaves = loadAllFaves;
   module.logOut = logOut;
+  module.getGroups = getGroups;
+  module.db = db;
 
 })(window.app);
