@@ -4,7 +4,9 @@ window.app = window.app || {};
   'use strict';
 
   var gui = require('nw.gui');
-  var db = new PouchDB('faves', {adapter: 'idb'});
+  var path = require('path');
+  var NeDB = require('nedb');
+  var db = new NeDB({filename: path.join(gui.App.dataPath, 'faves.db'), autoload: true});
   var vk = new module.VkApi('4831539', 'Sw8Zad1RgldsCXwlGK04');
   var scope = ['friends'];
   var url = vk.authUrl(scope);
@@ -38,27 +40,24 @@ window.app = window.app || {};
     if (_.isUndefined(vk.token)) {
       throw 'No token';}
 
-    vk.faveGetPosts(function(data){
-      if (data.error) {
-        console.log(data);
-        return;
-      }
-      var faves = data.response.items;
-      _.forEach(faves,
-        function(fave) {
-          fave._id = pouchCollate.toIndexableString([fave.date, fave.id]);
-          db.put(fave)
-            .then(function(res) {
-              if (res.ok) {
-              //  console.log('Loaded: ', fave._id);
-              }})
-            .catch(function(err) {
-              console.log(err);});});},
+    vk.faveGetPosts(
+      function(data){
+        if (data.error) {
+          console.log(data);
+          return;
+        }
+        var faves = data.response.items;
+        _.forEach(faves,
+          function(fave) {
+            fave._id = [fave.id, fave.date].join('.');
+            db.insert(fave, function(err) {
+              if (err) {
+                console.log(err);}});});},
 
-        function(status){
-          throw 'Error: ' + status;},
+      function(status){
+        throw 'Error: ' + status;},
 
-        {count: MAX_REQUEST_COUNT, extended: 0, offset: offset});};
+      {count: MAX_REQUEST_COUNT, extended: 0, offset: offset});};
 
   var loadAllFaves = function() {
     tryGetToken(function(token) {
@@ -67,7 +66,7 @@ window.app = window.app || {};
       vk.faveGetPosts(
         function(data) {
           if (data.error) {
-            if (data.error.error_code === 5) {
+            if (data.error['error_code'] === 5) {
               console.log(data);
               return;
             }
@@ -88,17 +87,12 @@ window.app = window.app || {};
 
 
   var getGroups = function() {
-    var map = function(doc, emit) {
-      emit(doc.owner_id, doc);
-    };
-    var reduce = function(keys, values) {
-      return _.map(values, function(el) {
-        return _.pick(el, ['date', 'from_id', 'text', 'attachments']);
+    return _.groupBy(
+      _.filter(db.getAllData(), function(doc) {
+        return _.pick(doc, ['id', 'owner_id', 'from_id', 'text', 'attachments', 'likes']);
+      }), function(doc) {
+        return doc['owner_id'];
       });
-    };
-    db.query({map: map, reduce: reduce}, {group: true}).then(function(res) {
-      console.log(res);
-    }).catch(function(err){console.log(err);});
   };
 
   module.loadAllFaves = loadAllFaves;
