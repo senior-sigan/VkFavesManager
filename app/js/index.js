@@ -7,8 +7,8 @@ global.app = global.app || {};
 
   require('../js/utils');
   require('../js/VkApi');
-
-  //module.events = new require('events').EventEmitter();
+  var events = require('events');
+  module.emitter = new events.EventEmitter();
   var loaded = 0;
   var toLoad = 0;
   var _ = require('lodash');
@@ -17,7 +17,14 @@ global.app = global.app || {};
   var NeDB = require('nedb');
   var db = new NeDB({
     filename: path.join(gui.App.dataPath, 'faves.db'),
-    autoload: true
+    autoload: true,
+    onload: function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        module.emitter.emit('dbLoaded');
+      }
+    }
   });
   var vk = new module.VkApi('4831539', 'Sw8Zad1RgldsCXwlGK04');
   var scope = ['friends'];
@@ -78,7 +85,7 @@ global.app = global.app || {};
       // don't check db erros. Calculate only success loadings
       loaded++;
       if (loaded === toLoad) {
-        //module.events.emit('favesLoaded');
+        module.emitter.emit('favesLoaded');
         console.log('favesLoaded');
       }
     });
