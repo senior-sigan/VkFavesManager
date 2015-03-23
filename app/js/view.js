@@ -47,11 +47,11 @@
 
   // wait for db connected
   app.emitter.on('dbLoaded', function(){
-    renderFaves();
+    //renderFaves();
   });
 
   //wait for application loaded
   app.mainWindow.on('loaded', function() {
-    handleLogin();
+    //handleLogin();
   });
 })(global.app);
