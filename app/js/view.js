@@ -8,15 +8,18 @@
   var $loading = $('#js-loading');
 
   var loadFaves = function() {
+    $loading.show();
+    $('#js-reload-faves').hide();
     app.loadAllFaves();
   };
 
   var renderFaves = function() {
-    var groups = app.getGroups();
-    _.forEach(groups, function(v, k) {
-      $favesContainer.append('<p>' + k + '</p>');
+    var faves = app.getFaves();
+    _.forEach(faves, function(v, k) {
+      $favesContainer.append('<img class="owner-photo" src="' + v[0].owner.photo + '"/>');
     });
     $loading.hide();
+    $('#js-reload-faves').show();
   };
 
   var handleLogin = function() {
@@ -29,7 +32,7 @@
 
   app.emitter.on('favesLoaded', function() {
     $loading.hide();
-    $favesContainer.html('NYA');
+    renderFaves();
   });
 
   app.emitter.on('render', function() {
@@ -45,13 +48,18 @@
     });
   });
 
+  $('#js-reload-faves').on('click', function(ev) {
+    ev.preventDefault();
+    loadFaves();
+  });
+
   // wait for db connected
   app.emitter.on('dbLoaded', function(){
-    //renderFaves();
+    renderFaves();
   });
 
   //wait for application loaded
   app.mainWindow.on('loaded', function() {
-    //handleLogin();
+    handleLogin();
   });
 })(global.app);

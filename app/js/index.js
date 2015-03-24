@@ -74,8 +74,30 @@ global.app = global.app || {};
       return;
     }
     var faves = data.response.items;
+    var profiles = {};
+    var groups = {};
+    _.forEach(data.response.profiles, function(profile) {
+      profiles[profile.id] = {
+        id: profile.id,
+        name: [profile.first_name, profile.last_name].join(' '),
+        url: ['https://vk.com/', profile.screen_name].join(''),
+        photo: profile.photo_100 || profile.photo_50,
+        type: 'profile'
+      };
+    });
+    _.forEach(data.response.groups, function(group) {
+      groups[group.id] = {
+        id: group.id,
+        name: group.name,
+        url: ['https://vk.com/', group.screen_name].join(''),
+        photo: group.photo_200 || group.photo_100 || group.photo_50,
+        type: group.type
+      };
+    });
+
     var favesWithId = _.map(faves, function(fave) {
       fave._id = [fave.id, fave.date].join('.');
+      fave.owner = fave.owner_id > 0 ? profiles[fave.owner_id] : groups[Math.abs(fave.owner_id)];
       return fave;
     });
     db.insert(favesWithId, function(err) {
@@ -101,7 +123,7 @@ global.app = global.app || {};
     }
     vk.faveGetPosts(saveFave, requestsError, {
       count: MAX_REQUEST_COUNT,
-      extended: 0,
+      extended: 1,
       offset: offset
     });
   };
@@ -110,6 +132,7 @@ global.app = global.app || {};
     if (data.error) {
       if (data.error['error_code'] === 5) {
         console.log(data);
+        logOut();
         return;
       }
       console.log(data.error);
@@ -137,21 +160,21 @@ global.app = global.app || {};
     });
   };
 
-
-  var getGroups = function() {
+  var getFaves = function() {
     var docs = db.getAllData();
     var filtered = _.filter(docs, function(doc) {
       return _.pick(doc, ['id', 'owner_id', 'from_id', 'text', 'attachments', 'likes']);
     });
-    return _.groupBy(filtered, function(doc) {
+    var grouped = _.groupBy(filtered, function(doc) {
       return doc['owner_id'];
     });
+    return _.sortBy(_.map(grouped), function(e){return e.length;}).reverse();
   };
 
   module.loadAllFaves = loadAllFaves;
+  module.getFaves = getFaves;
   module.logOut = logOut;
   module.isLoggedIn = isLoggedIn;
-  module.getGroups = getGroups;
   module.db = db;
   module.mainWindow = gui.Window.get();
 

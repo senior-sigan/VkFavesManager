@@ -66,5 +66,23 @@ global.app = global.app || {};
     xhr.send(null);
   };
 
+  VkApi.prototype.request = function(method, options, callback) {
+    options = options || {};
+    options['access_token'] = this.token;
+    options['v'] = API_VERSION;
+    var query = asUrlQuery(options);
+    var url = 'https://api.vk.com/method/' + method + '?' + query;
+    var xhr = new global.window.XMLHttpRequest();
+    xhr.onload = function() {
+      callback(null, JSON.parse(xhr.responseText), xhr);
+    };
+    xhr.onerror = function() {
+      callback(xhr.statusText, JSON.parse(xhr.responseText), xhr);
+    };
+    console.log('VkApi: SendRequest: ', url);
+    xhr.open('GET', url, true);
+    xhr.send(null);
+  };
+
   module.VkApi = VkApi;
 })(global.app);
