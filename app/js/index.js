@@ -162,6 +162,10 @@ global.app = global.app || {};
 
   var getFaves = function() {
     var docs = db.getAllData();
+    return groupByOwner(docs);
+  };
+
+  var groupByOwner = function(docs) {
     var filtered = _.filter(docs, function(doc) {
       return _.pick(doc, ['id', 'owner_id', 'from_id', 'text', 'attachments', 'likes']);
     });
@@ -171,8 +175,21 @@ global.app = global.app || {};
     return _.sortBy(_.map(grouped), function(e){return e.length;}).reverse();
   };
 
+  var getAudioFaves = function() {
+    var docs = db.getAllData();
+    return groupByOwner(_.compact(_.map(docs, function(doc) {
+      doc.attachments = _.filter(doc.attachments || [], function(attachment) {
+        return attachment.type === 'audio';
+      });
+      if (doc.attachments.length > 0) {
+        return doc;
+      }
+    })));
+  };
+
   module.loadAllFaves = loadAllFaves;
   module.getFaves = getFaves;
+  module.getAudioFaves = getAudioFaves;
   module.logOut = logOut;
   module.isLoggedIn = isLoggedIn;
   module.db = db;
