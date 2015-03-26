@@ -4,6 +4,7 @@ global.app = global.app || {};
   'use strict';
 
   global.$ = jQuery;
+  global.Tmpl = Handlebars;
 
   require('../js/utils');
   require('../js/VkApi');

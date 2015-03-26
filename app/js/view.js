@@ -6,6 +6,7 @@
   var $loginContainer = $('#js-loginContainer');
   var $favesContainer = $('#js-faves-container');
   var $loading = $('#js-loading');
+  var audioFavesTmpl = Tmpl.compile($('#audio-faves-template').html());
 
   var loadFaves = function() {
     $loading.show();
@@ -22,6 +23,13 @@
     $('#js-reload-faves').show();
   };
 
+  var renderAudioFaves = function() {
+    var faves = app.getAudioFaves();
+    $favesContainer.html(audioFavesTmpl(faves));
+    $loading.hide();
+    $('#js-reload-faves').show();
+  };
+
   var handleLogin = function() {
     if (app.isLoggedIn) {
       $loginContainer.hide();
@@ -32,7 +40,7 @@
 
   app.emitter.on('favesLoaded', function() {
     $loading.hide();
-    renderFaves();
+    renderAudioFaves();
   });
 
   app.emitter.on('render', function() {
@@ -55,7 +63,7 @@
 
   // wait for db connected
   app.emitter.on('dbLoaded', function(){
-    renderFaves();
+    renderAudioFaves();
   });
 
   //wait for application loaded

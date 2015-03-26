@@ -6,6 +6,16 @@
   <link rel="stylesheet" type="text/css" href="../css/main.css">
   <link rel="stylesheet" href="../bower_components/spinkit/css/spinners/7-three-bounce.css"></link>
   <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css"></link>
+  <script type="text/x-handlebars-temlate" id="audio-faves-template">
+    {{#each this}}
+      <img src="{{this.0.owner.photo}}"/>
+      {{#each this}}
+        {{#each attachments}}
+          <p>{{audio.artist}} - {{audio.title}}</p>
+        {{/each}}
+      {{/each}}
+    {{/each}}
+  </script>
 </head>
 <body>
   <div class="container">
