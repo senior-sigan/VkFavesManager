@@ -14,10 +14,6 @@
     "type": "git",
     "url": "git://github.com/blan4/VkFavesManager.git"
   },
-  "dependencies": {
-    "lodash": "^3.5.0",
-    "nedb": "^1.1.1"
-  },
   "devDependencies": {
     "concat-files": "~0.1.0",
     "grunt": "~0.4.5",
@@ -27,6 +23,7 @@
     "grunt-contrib-copy": "~0.5.0",
     "grunt-contrib-jshint": "~0.10.0",
     "grunt-contrib-rename": "0.0.3",
+    "grunt-node-webkit-builder": "^1.0.2",
     "load-grunt-tasks": "^0.6.0",
     "time-grunt": "^0.4.0"
   },
