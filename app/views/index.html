@@ -14,7 +14,12 @@
       {{#each this}}
         <div class='post'>
           {{#each attachments}}
-            <p>{{audio.artist}} - {{audio.title}}</p>
+            <div class='audio'>
+              <div class='play-btn' data-audio='{{audio.url}}'></div>
+              <div class='audio-info'>
+                <b>{{audio.artist}}</b> - <span>{{audio.title}}</span>
+              </div>
+            </div>
           {{/each}}
         </div>
       {{/each}}

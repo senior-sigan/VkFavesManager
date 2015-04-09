@@ -25,3 +25,20 @@
 img.owner-photo {
   width: 200px;
 }
+
+.audio {
+  display: block;
+  margin-top: 10px;
+}
+
+.play-btn {
+  float: left;
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+  background: url(http://st0.vk.me/images/playpause.gif) no-repeat 0px 0px;
+}
+
+.audio-info {
+  margin-left: 25px;
+}
