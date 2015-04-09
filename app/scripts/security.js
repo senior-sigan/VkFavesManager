@@ -1,6 +1,7 @@
 'use strict';
 
 var _ = require('lodash');
+var utils = require('../scripts/utils');
 var gui = global.gui;
 var VkApi = require('../scripts/vkApi');
 
@@ -17,11 +18,11 @@ var isLoggedIn = function() {
 };
 
 var tryGetToken = function(callback) {
-  if (localStorage.token) {
-    callback(localStorage.token);
+  if (global.localStorage.token) {
+    callback(global.localStorage.token);
   } else {
     startOauth(vk.authUrl(scope), function(token) {
-      localStorage.token = token;
+      global.localStorage.token = token;
       callback(token);
     });
   }

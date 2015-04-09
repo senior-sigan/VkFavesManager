@@ -15,7 +15,7 @@
         <div class='post'>
           {{#each attachments}}
             <div class='audio'>
-              <div class='play-btn' data-audio='{{audio.url}}'></div>
+              <div class='js-audio play-btn' data-audio='{{audio.url}}'></div>
               <div class='audio-info'>
                 <b>{{audio.artist}}</b> - <span>{{audio.title}}</span>
               </div>
@@ -47,9 +47,7 @@
     <div id='js-faves-container'>
     </div>
   </div>
-  <script type="text/javascript">
-    window.jQuery = require('jquery');
-  </script>
+  <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
   <script type='text/javascript' src='../bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
   <script type='text/javascript' src='../scripts/index.js'></script>
 </body>

@@ -14,7 +14,6 @@
   "chromium-args": "--child-clean-exit",
   "dependencies": {
     "handlebars": "^3.0.1",
-    "jquery": "^2.1.3",
     "lodash": "^3.5.0",
     "nedb": "^1.1.1",
     "open": "0.0.5"

@@ -2,10 +2,11 @@
 
 var security = require('../scripts/security');
 var data = require('../scripts/repository');
-var $ = require('jquery');
+var $ = global.jQuery;
 var _ = require('lodash');
 var open = require('open');
 var Tmpl = require('handlebars');
+var players = [];
 
 var $loginButton = $('#js-loginButon');
 var $loginContainer = $('#js-loginContainer');
@@ -50,6 +51,23 @@ $loginButton.on('click', function(ev) {
 $('#js-reload-faves').on('click', function(ev) {
   ev.preventDefault();
   loadFaves();
+});
+
+var stopPlaying = function() {
+  _.forEach(players, function(player) {
+    player.pause(function() {});
+  });
+  players = [];
+};
+
+$(window.document).on('click', '.js-audio', function(ev) {
+  ev.preventDefault();
+  stopPlaying();
+  var url = this.dataset.audio;
+  console.log(url);
+  var audio = new global.Audio(url);
+  audio.play();
+  players.push(audio);
 });
 
 // wait for db connected
