@@ -22,6 +22,24 @@ module.exports = function (grunt) {
       },
       src: ['<%= config.app %>/**/*']
     },
+    babel: {
+      options: {
+        sourceMap: true,
+        modules: 'common'
+      },
+      build: {
+        files: [{
+          expand: true,
+          dest: '<%= config.tmp %>',
+          cwd: '<%= config.app %>',
+          ext: '.js',
+          src: ['**/*.es6']
+        }]
+      }
+    },
+    clean: {
+      dist: ['<%= config.dist %>', '<%= config.tmp %>']
+    },
     jshint: {
       options: {
         jshintrc: '.jshintrc'

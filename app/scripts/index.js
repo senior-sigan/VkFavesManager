@@ -3,11 +3,8 @@ global.app = global.app || {};
 (function(module) {
   'use strict';
 
-  global.$ = jQuery;
-  global.Tmpl = Handlebars;
-
-  require('../js/utils');
-  require('../js/VkApi');
+  require('../scripts/utils');
+  require('../scripts/VkApi');
   var events = require('events');
   module.emitter = new events.EventEmitter();
   var loaded = 0;
@@ -182,7 +179,7 @@ global.app = global.app || {};
       doc.attachments = _.filter(doc.attachments || [], function(attachment) {
         return attachment.type === 'audio';
       });
-      if (doc.attachments.length > 0) {
+      if (doc.attachments.length > 1) {
         return doc;
       }
     })));
@@ -195,7 +192,8 @@ global.app = global.app || {};
   module.isLoggedIn = isLoggedIn;
   module.db = db;
   module.mainWindow = gui.Window.get();
+  module.gui = gui;
 
-  require('../js/view.js');
+  require('../scripts/view.js');
 
 })(global.app);

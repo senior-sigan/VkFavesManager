@@ -21,6 +21,7 @@
   "globals" : {
     "_": true,
     "jQuery": true,
-    "$": true
+    "$": true,
+    "Handlebars": true
   }
 }

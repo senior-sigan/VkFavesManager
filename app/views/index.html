@@ -2,45 +2,50 @@
 <html>
 <head>
   <title>VkFavesManager</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="../css/main.css">
-  <link rel="stylesheet" href="../bower_components/spinkit/css/spinners/7-three-bounce.css"></link>
-  <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css"></link>
-  <script type="text/x-handlebars-temlate" id="audio-faves-template">
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <link rel='stylesheet' type='text/css' href='../css/main.css'>
+  <link rel='stylesheet' href='../bower_components/spinkit/css/spinners/7-three-bounce.css'></link>
+  <link rel='stylesheet' href='../bower_components/bootstrap/dist/css/bootstrap.min.css'></link>
+  <script type='text/x-handlebars-temlate' id='audio-faves-template'>
     {{#each this}}
-      <img class="owner-photo" src="{{this.0.owner.photo}}"/>
+      <a href='{{this.0.owner.url}}' target='_blank'>
+        <img class='owner-photo' src='{{this.0.owner.photo}}'/>
+      </a>
       {{#each this}}
-        {{#each attachments}}
-          <p>{{audio.artist}} - {{audio.title}}</p>
-        {{/each}}
+        <div class='post'>
+          {{#each attachments}}
+            <p>{{audio.artist}} - {{audio.title}}</p>
+          {{/each}}
+        </div>
       {{/each}}
     {{/each}}
   </script>
 </head>
 <body>
-  <div class="container">
-    <div id="js-loading" class="loading">
-      <div class="sk-spinner sk-spinner-three-bounce">
-        <div class="sk-bounce1"></div>
-        <div class="sk-bounce2"></div>
-        <div class="sk-bounce3"></div>
+  <div class='container'>
+    <div id='js-loading' class='loading'>
+      <div class='sk-spinner sk-spinner-three-bounce'>
+        <div class='sk-bounce1'></div>
+        <div class='sk-bounce2'></div>
+        <div class='sk-bounce3'></div>
       </div>
     </div>
-    <div id="js-loginContainer" style="display: none;">
-      <div class="center">
+    <div id='js-loginContainer' style='display: none;'>
+      <div class='center'>
         <h1>Vk Faves Manager</h1>
-        <div class="login-button">
-          <a id="js-loginButon" href="#vk-oauth" class="btn btn-primary">Login via Vk</a>
+        <div class='login-button'>
+          <a id='js-loginButon' href='#vk-oauth' class='btn btn-primary'>Login via Vk</a>
         </div>
       </div>
     </div>
-    <a id="js-reload-faves" class="btn btn-warning">Reload faves</a>
-    <div id="js-faves-container">
+    <a id='js-reload-faves' class='btn btn-warning'>Reload faves</a>
+    <div id='js-faves-container'>
     </div>
   </div>
-  <script type="text/javascript" src="../bower_components/handlebars/handlebars.min.js"></script>
-  <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
-  <script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="../js/index.js"></script>
+  <script type="text/javascript">
+    window.jQuery = require('jquery');
+  </script>
+  <script type='text/javascript' src='../bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
+  <script type='text/javascript' src='../scripts/index.js'></script>
 </body>
 </html>

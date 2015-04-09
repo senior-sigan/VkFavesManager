@@ -1,6 +1,9 @@
 (function(app) {
   'use strict';
+  var $ = require('jquery');
   var _ = require('lodash');
+  var open = require('open');
+  var Tmpl = require('handlebars');
 
   var $loginButton = $('#js-loginButon');
   var $loginContainer = $('#js-loginContainer');
@@ -69,5 +72,10 @@
   //wait for application loaded
   app.mainWindow.on('loaded', function() {
     handleLogin();
+  });
+
+  app.mainWindow.on('new-win-policy', function(frame, url, policy){
+    open(url);
+    policy.ignore();
   });
 })(global.app);
