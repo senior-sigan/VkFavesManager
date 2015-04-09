@@ -1,8 +1,8 @@
 node_modules/
 tmp/
+.tmp/
 .DS_Store
 buildTmp/
-node_modules/
 app/bower_components/
 dist/
 resources/
@@ -10,3 +10,4 @@ faves/
 webkitbuilds/
 cache/
 *.log
+.idea

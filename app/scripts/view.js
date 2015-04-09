@@ -1,81 +1,68 @@
-(function(app) {
-  'use strict';
-  var $ = require('jquery');
-  var _ = require('lodash');
-  var open = require('open');
-  var Tmpl = require('handlebars');
+'use strict';
 
-  var $loginButton = $('#js-loginButon');
-  var $loginContainer = $('#js-loginContainer');
-  var $favesContainer = $('#js-faves-container');
-  var $loading = $('#js-loading');
-  var audioFavesTmpl = Tmpl.compile($('#audio-faves-template').html());
+var security = require('../scripts/security');
+var data = require('../scripts/repository');
+var $ = require('jquery');
+var _ = require('lodash');
+var open = require('open');
+var Tmpl = require('handlebars');
 
-  var loadFaves = function() {
-    $loading.show();
-    $('#js-reload-faves').hide();
-    app.loadAllFaves();
-  };
+var $loginButton = $('#js-loginButon');
+var $loginContainer = $('#js-loginContainer');
+var $favesContainer = $('#js-faves-container');
+var $loading = $('#js-loading');
+var audioFavesTmpl = Tmpl.compile($('#audio-faves-template').html());
 
-  var renderFaves = function() {
-    var faves = app.getFaves();
-    _.forEach(faves, function(v, k) {
-      $favesContainer.append('<img class="owner-photo" src="' + v[0].owner.photo + '"/>');
-    });
-    $loading.hide();
-    $('#js-reload-faves').show();
-  };
+var loadFaves = function() {
+  $loading.show();
+  $('#js-reload-faves').hide();
+  data.loadAllFaves();
+};
 
-  var renderAudioFaves = function() {
-    var faves = app.getAudioFaves();
-    $favesContainer.html(audioFavesTmpl(faves));
-    $loading.hide();
-    $('#js-reload-faves').show();
-  };
+var renderAudioFaves = function() {
+  var faves = data.getAudioFaves();
+  $favesContainer.html(audioFavesTmpl(faves));
+  $loading.hide();
+  $('#js-reload-faves').show();
+};
 
-  var handleLogin = function() {
-    if (app.isLoggedIn) {
-      $loginContainer.hide();
-    } else {
-      $loginContainer.show();
-    }
-  };
+var handleLogin = function() {
+  if (security.isLoggedIn) {
+    $loginContainer.hide();
+  } else {
+    $loginContainer.show();
+  }
+};
 
-  app.emitter.on('favesLoaded', function() {
-    $loading.hide();
-    renderAudioFaves();
-  });
+data.emitter.on('favesLoaded', function() {
+  $loading.hide();
+  renderAudioFaves();
+});
 
-  app.emitter.on('render', function() {
-    $loading.hide();
-    return renderFaves();
-  });
-
-  $loginButton.on('click', function(ev) {
-    ev.preventDefault();
-    app.tryGetToken(function() {
-      handleLogin();
-      loadFaves();
-    });
-  });
-
-  $('#js-reload-faves').on('click', function(ev) {
-    ev.preventDefault();
+$loginButton.on('click', function(ev) {
+  ev.preventDefault();
+  security.tryGetToken(function() {
+    handleLogin();
     loadFaves();
   });
+});
 
-  // wait for db connected
-  app.emitter.on('dbLoaded', function(){
-    renderAudioFaves();
-  });
+$('#js-reload-faves').on('click', function(ev) {
+  ev.preventDefault();
+  loadFaves();
+});
 
-  //wait for application loaded
-  app.mainWindow.on('loaded', function() {
-    handleLogin();
-  });
+// wait for db connected
+data.emitter.on('dbLoaded', function(){
+  renderAudioFaves();
+});
 
-  app.mainWindow.on('new-win-policy', function(frame, url, policy){
-    open(url);
-    policy.ignore();
-  });
-})(global.app);
+//wait for application loaded
+global.mainWindow.on('loaded', function() {
+  handleLogin();
+});
+
+global.mainWindow.on('new-win-policy', function(frame, url, policy){
+  open(url);
+  policy.ignore();
+});

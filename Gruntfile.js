@@ -15,10 +15,15 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     config: config,
+    shell: {
+      start: {
+        command: 'nodewebkit <%= config.app %>'
+      }
+    },
     nodewebkit: {
       options: {
           platforms: config.platforms,
-          buildDir: config.build,
+          buildDir: config.build
       },
       src: ['<%= config.app %>/**/*']
     },
@@ -45,6 +50,6 @@ module.exports = function (grunt) {
         jshintrc: '.jshintrc'
       },
       files: '<%= config.app %>/js/*.js'
-    },
+    }
   });
 };
