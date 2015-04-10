@@ -15,7 +15,7 @@
         <div class='post'>
           {{#each attachments}}
             <div class='audio'>
-              <div class='js-audio play-btn' data-audio='{{audio.url}}'></div>
+              <div class='js-audio play-btn' data-number='{{@index}}' data-audio='{{audio.url}}'></div>
               <div class='audio-info'>
                 <b>{{audio.artist}}</b> - <span>{{audio.title}}</span>
               </div>

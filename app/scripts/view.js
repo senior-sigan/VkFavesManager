@@ -6,7 +6,7 @@ var $ = global.jQuery;
 var _ = require('lodash');
 var open = require('open');
 var Tmpl = require('handlebars');
-var players = [];
+var players = {};
 
 var $loginButton = $('#js-loginButon');
 var $loginContainer = $('#js-loginContainer');
@@ -54,20 +54,27 @@ $('#js-reload-faves').on('click', function(ev) {
 });
 
 var stopPlaying = function() {
-  _.forEach(players, function(player) {
-    player.pause(function() {});
+  _.forIn(players, function(audio) {
+    audio.pause(function() {});
   });
-  players = [];
+};
+
+var playNext = function(id) {
+  console.log(id);
 };
 
 $(window.document).on('click', '.js-audio', function(ev) {
   ev.preventDefault();
   stopPlaying();
   var url = this.dataset.audio;
+  var number = this.dataset.number;
   console.log(url);
   var audio = new global.Audio(url);
   audio.play();
-  players.push(audio);
+  audio.addEventListener('ended', function() {
+    playNext(number + 1);
+  });
+  players[url] = audio;
 });
 
 // wait for db connected
