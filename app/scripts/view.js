@@ -2,17 +2,19 @@
 
 var security = require('../scripts/security');
 var data = require('../scripts/repository');
+var AudioPlayer = require('../scripts/audioPlayer');
 var $ = global.jQuery;
 var _ = require('lodash');
 var open = require('open');
-var Tmpl = require('handlebars');
-var players = {};
+var Handlebars = require('handlebars');
 
 var $loginButton = $('#js-loginButon');
 var $loginContainer = $('#js-loginContainer');
 var $favesContainer = $('#js-faves-container');
 var $loading = $('#js-loading');
-var audioFavesTmpl = Tmpl.compile($('#audio-faves-template').html());
+var audioFavesTmpl = Handlebars.compile($('#audio-faves-template').html());
+var audioPlayer;
+var currentPlaying = -1;
 
 var loadFaves = function() {
   $loading.show();
@@ -22,6 +24,15 @@ var loadFaves = function() {
 
 var renderAudioFaves = function() {
   var faves = data.getAudioFaves();
+  var i = 0;
+  _.forEach(faves, function(faves) {
+    _.forEach(faves, function(fave) {
+      _.forEach(fave.attachments, function(attachment) {
+        attachment.number = i++;
+      });
+    });
+  });
+  audioPlayer = new AudioPlayer();
   $favesContainer.html(audioFavesTmpl(faves));
   $loading.hide();
   $('#js-reload-faves').show();
@@ -53,28 +64,20 @@ $('#js-reload-faves').on('click', function(ev) {
   loadFaves();
 });
 
-var stopPlaying = function() {
-  _.forIn(players, function(audio) {
-    audio.pause(function() {});
-  });
-};
-
-var playNext = function(id) {
-  console.log(id);
-};
-
 $(window.document).on('click', '.js-audio', function(ev) {
   ev.preventDefault();
-  stopPlaying();
   var url = this.dataset.audio;
-  var number = this.dataset.number;
-  console.log(url);
-  var audio = new global.Audio(url);
-  audio.play();
-  audio.addEventListener('ended', function() {
-    playNext(number + 1);
+  $('.js-audio[data-number=' + currentPlaying + ']').removeClass('stop-btn').addClass('play-btn');
+  if (currentPlaying === this.dataset.number) {
+    audioPlayer.stop();
+    return;
+  }
+  currentPlaying = this.dataset.number;
+  $('.js-audio[data-number=' + currentPlaying + ']').addClass('stop-btn').removeClass('play-btn');
+  audioPlayer.play(url, function() {
+    //number++;
+    //return $('.js-audio[data-number=' + number + ']').dataset.audio;
   });
-  players[url] = audio;
 });
 
 // wait for db connected

@@ -39,6 +39,14 @@ img.owner-photo {
   background: url(http://st0.vk.me/images/playpause.gif) no-repeat 0px 0px;
 }
 
+.stop-btn {
+  float: left;
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+  background: url(http://st0.vk.me/images/playpause.gif) no-repeat 0px -16px;
+}
+
 .audio-info {
   margin-left: 25px;
 }
