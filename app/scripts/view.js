@@ -68,15 +68,19 @@ $(window.document).on('click', '.js-audio', function(ev) {
   ev.preventDefault();
   var url = this.dataset.audio;
   $('.js-audio[data-number=' + currentPlaying + ']').removeClass('stop-btn').addClass('play-btn');
-  if (currentPlaying === this.dataset.number) {
+  if (currentPlaying === parseInt(this.dataset.number)) {
     audioPlayer.stop();
+    currentPlaying = -1;
     return;
   }
-  currentPlaying = this.dataset.number;
+  currentPlaying = parseInt(this.dataset.number);
   $('.js-audio[data-number=' + currentPlaying + ']').addClass('stop-btn').removeClass('play-btn');
-  audioPlayer.play(url, function() {
-    //number++;
-    //return $('.js-audio[data-number=' + number + ']').dataset.audio;
+  audioPlayer.play({url: url, id: currentPlaying, name: this.dataset.name}, function() {
+    $('.js-audio[data-number=' + currentPlaying + ']').removeClass('stop-btn').addClass('play-btn');
+    currentPlaying++;
+    var $this = $('.js-audio[data-number=' + currentPlaying + ']');
+    $this.addClass('stop-btn').removeClass('play-btn');
+    return {url: $this.data('audio'), id: $this.data('number'), name: $this.data('name')};
   });
 });
 

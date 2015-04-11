@@ -6,7 +6,7 @@ var gui = global.gui;
 var VkApi = require('../scripts/vkApi');
 
 var vk = new VkApi('4831539', 'Sw8Zad1RgldsCXwlGK04');
-var scope = ['friends'];
+var scope = ['friends', 'offline '];
 
 var logOut = function() {
   localStorage.clear();

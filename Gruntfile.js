@@ -6,7 +6,7 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
 
   var config = {
-    platforms: ['win'],
+    platforms: ['win', 'linux'],
     app: './app',
     build: './webkitbuilds',
     tmp: './tmp',

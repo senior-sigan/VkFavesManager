@@ -12,8 +12,8 @@ AudioPlayer.prototype.stop = function() {
   }
 };
 
-AudioPlayer.prototype.play = function(url, next) {
-  if (!url) {
+AudioPlayer.prototype.play = function(data, next) {
+  if (!data || !data.url) {
     return;
   }
 
@@ -22,11 +22,16 @@ AudioPlayer.prototype.play = function(url, next) {
     this.audio = null;
   }
 
-  this.audio = new Audio(url);
+  console.log('Playing: ', data.name, data.id);
+  this.audio = new Audio(data.url);
   this.audio.play();
   this.audio.addEventListener('ended', function() {
-    this.playAudio(next.call(), next);
+    this.play(next.call(), next);
   }.bind(this));
+
+  this.audio.addEventListener('progress', function(ev){
+    console.log(ev.path[0].currentTime, ev.path[0].duration, ev.path[0].currentTime / ev.path[0].duration);
+  });
 };
 
 module.exports = AudioPlayer;
