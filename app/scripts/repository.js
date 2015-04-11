@@ -129,16 +129,24 @@ var groupByOwner = function(docs) {
   return _.sortBy(_.map(grouped), function(e){return e.length;}).reverse();
 };
 
+var filterAudio = function(doc) {
+  doc.attachments = _.filter(doc.attachments || [], function(attachment) {
+    return attachment.type === 'audio';
+  });
+  if (doc.copy_history) {
+    var repostDoc = filterAudio(doc.copy_history[0]) || {};
+    doc.attachments = _.union(doc.attachments, repostDoc.attachments);
+  }
+  if (doc.attachments.length > 1) {
+    return doc;
+  }
+};
+
+
 var getAudioFaves = function() {
   var docs = db.getAllData();
-  return groupByOwner(_.compact(_.map(docs, function(doc) {
-    doc.attachments = _.filter(doc.attachments || [], function(attachment) {
-      return attachment.type === 'audio';
-    });
-    if (doc.attachments.length > 1) {
-      return doc;
-    }
-  })));
+
+  return groupByOwner(_.compact(_.map(docs, filterAudio)));
 };
 
 module.exports.loadAllFaves = loadAllFaves;
